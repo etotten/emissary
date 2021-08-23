@@ -160,11 +160,9 @@ spec:
             {{- toYaml .Values.prometheusExporter.resources | nindent 12 }}
         {{- end }}
         - name: {{ if .Values.containerNameOverride }}{{ .Values.containerNameOverride }}{{ else }}{{ .Chart.Name }}{{ end }}
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/bin/sleep","0"]
-          {{- if .Values.image.fullImageOverride }}
+        {{- if .Values.service.lifecycle }}
+        {{ toYaml .Values.service.lifecycle | nindent 8 }}
+        {{- end }}
           image: '{{ .Values.image.fullImageOverride }}'
           {{- else }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
